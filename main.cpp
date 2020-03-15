@@ -65,6 +65,7 @@ int main(){
     char tipo;
     double longitud;
     double latitud;
+    double result;
 
     fstream newfile;
 
@@ -117,19 +118,31 @@ int main(){
             contador =  contador + 1;
         }
 
+        newfile.close(); //close the file object.
+
+
+        // Creacion de la matriz con las distancias
+        for (int i = 0; i < loop -1; i++)
+        {
+            
+            for (int j = i + 1 ; j < loop; j++)
+            {
+                  result = haversine(nodArray[i].latitud, nodArray[i].longitud,nodArray[j].latitud, nodArray[j].longitud);
+                  matrizDistancias[i][i] = 0.0;
+                  matrizDistancias[i][j] = result;
+                  matrizDistancias[j][i] =  result;
+            }
+            
+        }
         
+        matrizDistancias[loop -1][loop -1] = 0.0;
 
-        double result;
-
-        result = haversine(nodArray[0].latitud, nodArray[0].longitud,nodArray[1].latitud, nodArray[1].longitud);
+         
          
 
-        cout << result << "\n";
+        cout << matrizDistancias[3][4] << "\n";
 
-        while(getline(newfile, tp)){ //read data from file object and put it into string.
- 
-            //cout << tp << "\n"; //print the data of the string
-        }
-        newfile.close(); //close the file object.
+
+        
     }
 }
