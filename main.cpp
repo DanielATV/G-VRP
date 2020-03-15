@@ -6,20 +6,15 @@
 
 using namespace std;
 
-class Geeks 
-{ 
-    // Access specifier 
-    public: 
-  
-    // Data Members 
-    string geekname; 
-  
-    // Member Functions() 
-    void printname() 
-    { 
-       cout << "Geekname is: " << geekname; 
-    } 
+struct nodo
+{
+    char tipo;
+    double latitud;
+    double longitud;
+    int id;
+    int index;
 };
+
 
 static double haversine(double lat1, double lon1, 
                         double lat2, double lon2) 
@@ -63,6 +58,13 @@ int main(){
 
     // Variables del main
     int loop;
+    int contador = 0;
+    char strTemp;
+    string buffer;
+    int id;
+    char tipo;
+    double longitud;
+    double latitud;
 
     fstream newfile;
 
@@ -71,9 +73,7 @@ int main(){
         string tp;
 
         getline(newfile, tp);
-	
         stringstream s(tp); // Used for breaking words 
-        string word; // to store individual words 
     
         s >> name;
         s >> costumers;
@@ -83,6 +83,37 @@ int main(){
         s >> serviceTime;
         s >> refuelTime;
 
+        loop = costumers + stations + 1;
+        struct nodo nodArray[loop];
+        
+        double matrizDistancias[loop][loop];
+
+        getline(newfile, tp);
+        s=std::stringstream();
+        s.str(tp);
+        s >> buffer;
+        cout << buffer << "\n";
+        s >> buffer;
+        cout << buffer << "\n";
+        s >> buffer;
+        cout << buffer << "\n";
+        s >> buffer;
+        cout << buffer << "\n";
+
+        //s >> nodArray[contador].id;
+        //s >> nodArray[contador].tipo;
+        //s >> nodArray[contador].longitud;
+        //s >> nodArray[contador].latitud;
+        nodArray[contador].index = contador;
+        contador =  contador + 1;
+
+
+        double result;
+
+        result = haversine(nodArray[0].latitud, nodArray[0].longitud,nodArray[1].latitud, nodArray[1].longitud);
+         
+
+        //cout << nodArray[0].latitud << "\n";
 
         while(getline(newfile, tp)){ //read data from file object and put it into string.
  
