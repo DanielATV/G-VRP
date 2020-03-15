@@ -98,72 +98,59 @@ int main(){
     nodArray[contador].index = contador;
     contador =  contador + 1;
 
-    cout << nodArray[0].id  << "\n";
-    cout << nodArray[0].tipo  << "\n";
-    cout << nodArray[0].longitud  << "\n";
-    cout << nodArray[0].latitud  << "\n";
-        
     // Se salta f0 que es igual a d0
-    getline(newfile, tp);
+    newfile >> nodId >> type >> longitude >> latitude;
 
-        // while(contador < loop){
-        //     getline(newfile, tp);
-        //     s=std::stringstream();
-        //     s.str(tp);
-           
-        //     s >> nodArray[contador].id;
-        //     s >> nodArray[contador].tipo;
-        //     nodArray[contador].tipo = "asd";
-        //     s >> nodArray[contador].longitud;
-        //     s >> nodArray[contador].latitud;
-        //     nodArray[contador].index = contador;
-        //     contador =  contador + 1;
+    while(contador < loop){
 
+            newfile >> nodId >> type >> longitude >> latitude;
+
+            nodArray[contador].id =  nodId;
+            nodArray[contador].tipo = type;
+            nodArray[contador].longitud = longitude;
+            nodArray[contador].latitud = latitude;
+            nodArray[contador].index = contador;
             
-        //     cout << nodArray[contador].tipo << "\n";
+            if(nodArray[contador].tipo == "f"){
+                
+                vEstaciones.push_back(nodArray[contador].index);
 
-        //     if(nodArray[contador].tipo == 'f'){
+            } else {
+                
+                vClientes.push_back(nodArray[contador].index);
+            }
 
-        //         vEstaciones.push_back(nodArray[contador].index);
-
-        //     }
-        //     if(nodArray[contador].tipo == 'c')
-        //     {
-        //         vClientes.push_back(nodArray[contador].index);
-        //     }
+            contador =  contador + 1;
             
-        // }
+    }
 
-        // newfile.close(); //close the file object.
+    newfile.close(); //close the file object.
 
 
-        // // Creacion de la matriz con las distancias
-        // for (int i = 0; i < loop -1; i++)
-        // {
+    // Creacion de la matriz con las distancias
+    for (int i = 0; i < loop -1; i++){
+        for (int j = i + 1 ; j < loop; j++){
+            result = haversine(nodArray[i].latitud, nodArray[i].longitud,nodArray[j].latitud, nodArray[j].longitud);
+            matrizDistancias[i][i] = 0.0;
+            matrizDistancias[i][j] = result;
+            matrizDistancias[j][i] =  result;
+        }
             
-        //     for (int j = i + 1 ; j < loop; j++)
-        //     {
-        //           result = haversine(nodArray[i].latitud, nodArray[i].longitud,nodArray[j].latitud, nodArray[j].longitud);
-        //           matrizDistancias[i][i] = 0.0;
-        //           matrizDistancias[i][j] = result;
-        //           matrizDistancias[j][i] =  result;
-        //     }
-            
-        // }
+    }
         
-        // matrizDistancias[loop -1][loop -1] = 0.0;
+    matrizDistancias[loop -1][loop -1] = 0.0;
 
-        // // Creacion de sol inicial
+    // Creacion de sol inicial
 
-        // for (int i = 0; i < vClientes.size(); i++)
-        // {
-        //     cout << vClientes[i] << "\n";
-        // }
+    for (int i = 0; i < vClientes.size(); i++){
+        cout << vClientes[i] << "\n";
+    }
 
-        // for (int i = 0; i < vEstaciones.size(); i++)
-        // {
-        //     cout << vEstaciones[i] << "\n";
-        // }
+    for (int i = 0; i < vEstaciones.size(); i++){
+        cout << vEstaciones[i] << "\n";
+    }
+
+    cout << matrizDistancias[0][60] << "\n";
         
          
         
