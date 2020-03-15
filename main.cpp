@@ -45,11 +45,24 @@ static double haversine(double lat1, double lon1,
     }
 int main(){
 
+    //Variables del archivo
+    string name;
+    int costumers;
+    int stations;
+    int maxTime;
+    int maxDistnace;
+    int speed;
+    int serviceTime;
+    int refuelTime;
+
     // Variables para calcular la distancia
     double lat1; 
     double lon1; 
     double lat2; 
     double lon2;
+
+    // Variables del main
+    int loop;
 
     fstream newfile;
 
@@ -62,11 +75,14 @@ int main(){
         stringstream s(tp); // Used for breaking words 
         string word; // to store individual words 
     
-        
-        while (s >> word){
-            cout << word << "\n";
-        }
-        
+        s >> name;
+        s >> costumers;
+        s >> stations;
+        s >> maxTime;
+        s >> speed;
+        s >> serviceTime;
+        s >> refuelTime;
+
 
         while(getline(newfile, tp)){ //read data from file object and put it into string.
  
