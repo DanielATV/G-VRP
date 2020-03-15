@@ -4,6 +4,8 @@
 #include <sstream>
 #include <cmath> 
 #include <vector>
+#include <limits>
+#include <algorithm>
 
 using namespace std;
 
@@ -57,11 +59,6 @@ int main(){
     double longitude;
     double latitude;
 
-    // Variables para calcular la distancia
-    double lat1; 
-    double lon1; 
-    double lat2; 
-    double lon2;
 
     // Variables del main
     int loop;
@@ -75,6 +72,12 @@ int main(){
     vector<int> vClientes;
     vector<int> vEstaciones;
     vector<int> vecTemp;
+    vector<int> solIncial;
+    int flag = 0;
+    int intBuffer;
+    double dummyResult;
+    int indexSave;
+    int saveLast;
    
     fstream newfile;
 
@@ -83,7 +86,7 @@ int main(){
     newfile >> name >> costumers >> stations >> maxTime >> maxDistance >> speed >> serviceTime >> refuelTime;
 
 
-    loop = costumers + stations;
+    loop = 1+costumers + stations;
     struct nodo nodArray[loop];
     double matrizDistancias[loop][loop];
 
@@ -128,7 +131,7 @@ int main(){
 
 
     // Creacion de la matriz con las distancias
-    for (int i = 0; i < loop -1; i++){
+    for (int i = 0; i < loop; i++){
         for (int j = i + 1 ; j < loop; j++){
             result = haversine(nodArray[i].latitud, nodArray[i].longitud,nodArray[j].latitud, nodArray[j].longitud);
             matrizDistancias[i][i] = 0.0;
@@ -142,16 +145,64 @@ int main(){
 
     // Creacion de sol inicial
 
-    for (int i = 0; i < vClientes.size(); i++){
-        cout << vClientes[i] << "\n";
-    }
+    solIncial.push_back(0);
+    
+    vector<int>::iterator buscador;
+    while (vecTemp.size() != costumers){
 
-    for (int i = 0; i < vEstaciones.size(); i++){
-        cout << vEstaciones[i] << "\n";
-    }
+        if (flag == 0){
 
-    cout << matrizDistancias[0][60] << "\n";
+            result = std::numeric_limits<double>::max();
+            intBuffer = solIncial.back();
+            for (int i =   stations; i < loop; i++){
+
+
+
+                dummyResult = matrizDistancias[intBuffer][i];
+
+                buscador = find(solIncial.begin(),solIncial.end(), i);
+
+                if (buscador == solIncial.end()){
+                    
+                    saveLast = i;
+
+                    if (dummyResult <= result){
+
+                        result = dummyResult;
+                        indexSave = i;
+
+                    }
+                    
+                }
+                
+
+            }
+
+            if (vecTemp.size() == costumers -1){
+
+                solIncial.push_back(saveLast);
+                vecTemp.push_back(saveLast);
+            } else {
+                solIncial.push_back(indexSave);
+                vecTemp.push_back(indexSave);
+            }
+            
+            
+            
+            
+        }
         
+        
+    }
+    
+    // sort(solIncial.begin(),solIncial.end());
+    for (int i = 0; i < solIncial.size(); i++){
+         cout << solIncial[i] - 22<< "\n";
+    }
+
+ 
+
+
          
         
     
