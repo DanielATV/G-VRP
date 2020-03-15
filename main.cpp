@@ -83,37 +83,48 @@ int main(){
         s >> serviceTime;
         s >> refuelTime;
 
-        loop = costumers + stations + 1;
+        loop = costumers + stations;
         struct nodo nodArray[loop];
         
         double matrizDistancias[loop][loop];
 
+
+        // Punto de partida
         getline(newfile, tp);
         s=std::stringstream();
         s.str(tp);
-        s >> buffer;
-        cout << buffer << "\n";
-        s >> buffer;
-        cout << buffer << "\n";
-        s >> buffer;
-        cout << buffer << "\n";
-        s >> buffer;
-        cout << buffer << "\n";
 
-        //s >> nodArray[contador].id;
-        //s >> nodArray[contador].tipo;
-        //s >> nodArray[contador].longitud;
-        //s >> nodArray[contador].latitud;
+        s >> nodArray[contador].id;
+        s >> nodArray[contador].tipo;
+        s >> nodArray[contador].longitud;
+        s >> nodArray[contador].latitud;
         nodArray[contador].index = contador;
         contador =  contador + 1;
+        
+        // Se salta f0 que es igual a d0
+        getline(newfile, tp);
 
+        while(contador < loop){
+            getline(newfile, tp);
+            s=std::stringstream();
+            s.str(tp);
+
+            s >> nodArray[contador].id;
+            s >> nodArray[contador].tipo;
+            s >> nodArray[contador].longitud;
+            s >> nodArray[contador].latitud;
+            nodArray[contador].index = contador;
+            contador =  contador + 1;
+        }
+
+        
 
         double result;
 
         result = haversine(nodArray[0].latitud, nodArray[0].longitud,nodArray[1].latitud, nodArray[1].longitud);
          
 
-        //cout << nodArray[0].latitud << "\n";
+        cout << result << "\n";
 
         while(getline(newfile, tp)){ //read data from file object and put it into string.
  
