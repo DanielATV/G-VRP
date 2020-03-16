@@ -81,6 +81,7 @@ int main(){
     vector<int> vecTemp;
     vector<int> solIncial;
     vector<int> solTemporal;
+    vector<int> solBest;
     int flag = 0;
     int intBuffer;
     double dummyResult;
@@ -93,6 +94,7 @@ int main(){
     float tiemExce;
     float calculoAux;
     float calculoAux2;
+    float calidadBest;
     float calidadSol;
     float calidadVecino;
     int seed= 123;
@@ -102,7 +104,7 @@ int main(){
     int indiceHelp2;
     int indiceHelp3;
     int indiceHelp4;
-    int contadorIter;
+    int contadorIter = 0;
 
     int terminationCriterion = 0;
     //////////////////////////////////////////////////////////////////////////////////////////////
@@ -329,12 +331,15 @@ int main(){
     calidadSol = travelDistance +  disExce + tiemExce*speed;
 
     cout << calidadSol << "\n";
-    cout << travelDistance << "\n";
-    cout << disExce << "\n";
-    cout << tiemExce << "\n";
+    // cout << travelDistance << "\n";
+    // cout << disExce << "\n";
+    // cout << tiemExce << "\n";
 
  
     // Simulated Anneling
+
+    solBest = solIncial;
+    calidadBest = calidadSol;
 
     // Vecindario solo swap y AFV
 
@@ -402,6 +407,95 @@ int main(){
 
             solTemporal.insert(solTemporal.begin() + indiceHelp2, indiceHelp1);
         }
+
+        contadorIter = contadorIter +1 ;
+
+
+        // Evaluar calidad
+
+        distanceLeft = maxDistance;
+        timeLeft = maxTime;
+        travelDistance = 0.0;
+        disExce = 0.0;
+        tiemExce = 0.0;
+
+        for (int i = 0; i < solTemporal.size() -1; i++){
+            
+            if (solTemporal[i] == 0 && solTemporal[i+1] == 0){
+                i = i +1;
+            }
+            if (i == solTemporal.size()){
+                break;
+            }
+            
+            
+            if (solTemporal[i] != 0 && solTemporal[i+1] == 0 ){
+                
+                calculoAux = distanceLeft - matrizDistancias[solTemporal[i]][solTemporal[i+1]];
+                calculoAux2 = timeLeft - (matrizDistancias[solTemporal[i]][solTemporal[i+1]])/speed;
+                travelDistance = travelDistance + matrizDistancias[solTemporal[i]][solTemporal[i+1]];
+
+                if (calculoAux < 0){
+                    disExce = disExce + abs(calculoAux);
+                }
+
+                if (calculoAux2 < 0){
+                    tiemExce = tiemExce + abs(calculoAux2);
+                }
+
+                distanceLeft = maxDistance;
+                timeLeft = maxTime;
+                i = i +1;
+
+            } else{
+                if (solTemporal[i] <= stations){
+
+                    calculoAux = distanceLeft - matrizDistancias[solTemporal[i]][solTemporal[i+1]];
+                    calculoAux2 = timeLeft - refuelTime;
+                    travelDistance = travelDistance + matrizDistancias[solTemporal[i]][solTemporal[i+1]];
+
+                    if (calculoAux < 0){
+                        disExce = disExce + abs(calculoAux);
+                    }
+
+                    if (calculoAux2 < 0){
+                        tiemExce = tiemExce + abs(calculoAux2);
+                    }                
+
+                    distanceLeft = maxDistance;
+
+                } else{
+
+                    calculoAux = distanceLeft - matrizDistancias[solTemporal[i]][solTemporal[i+1]];
+                    calculoAux2 = timeLeft - serviceTime;
+                    travelDistance = travelDistance + matrizDistancias[solTemporal[i]][solTemporal[i+1]];
+
+                    if (calculoAux < 0){
+                        disExce = disExce + abs(calculoAux);
+                        distanceLeft = 0.0;
+                    } else{
+                        distanceLeft = distanceLeft - calculoAux; 
+                    }
+                    
+
+                    if (calculoAux2 < 0){
+                        tiemExce = tiemExce + abs(calculoAux2);
+                        timeLeft = 0.0;
+                    } else{
+                        timeLeft = timeLeft - calculoAux2;
+                    }
+                    
+                }
+                
+            }
+            
+            
+        }
+
+        calidadVecino = travelDistance +  disExce + tiemExce*speed;
+
+        cout << calidadVecino << "\n";
+
 
         terminationCriterion = terminationCriterion +1;
 
