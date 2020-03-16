@@ -340,10 +340,13 @@ int main(){
 
     while (terminationCriterion < 5){
         dado = static_cast<float>( rand())/ static_cast <float> (RAND_MAX);
+        
 
 
         if (dado <= 0.5){
             cout << "swap" << "\n";
+
+            //Swap
 
             solTemporal = solIncial;
 
@@ -377,13 +380,34 @@ int main(){
 
         } else {
             cout << "insert" << "\n";
+
+            // Insert
+
+            solTemporal = solIncial;
+
+            randomIndice = (rand() % stations) + 1;
+
+            indiceHelp1 = randomIndice;
+
+            flag = 1;
+            while (flag != 0){
+                randomIndice = rand() % solTemporal.size();
+
+                if( solTemporal[randomIndice] != 0){
+                    flag = 0;
+                }
+            }
+
+            indiceHelp2 = randomIndice;
+
+            solTemporal.insert(solTemporal.begin() + indiceHelp2, indiceHelp1);
         }
 
         terminationCriterion = terminationCriterion +1;
 
         // for (int i = 0; i < solTemporal.size(); i++){
         //     cout << solTemporal[i]<< "\n";
-        }
+        //}
     }
     
 
