@@ -7,9 +7,10 @@
 #include <vector>
 #include <limits>
 #include <algorithm>
+#include <chrono>
 
 using namespace std;
-
+using namespace chrono;
 struct nodo
 {
     string tipo;
@@ -68,6 +69,7 @@ int main(){
     int iteraciones = 70000;
 
     // Variables del main
+    int timeStop= 10;
     int loop;
     int contador = 0;
     char strTemp;
@@ -349,13 +351,15 @@ int main(){
     // Vecindario
     solActual = solIncial;
     
-    while (terminationCriterion < 5){
+
+    auto start = high_resolution_clock::now();
+
+    while (1){
         dado = static_cast<float>( rand())/ static_cast <float> (RAND_MAX);
         
         solTemporal = solActual;
 
         if (dado <= 0.5){
-            cout << "swap" << "\n";
 
             //Swap
 
@@ -390,7 +394,6 @@ int main(){
             solTemporal[indiceHelp2] = indiceHelp3;
 
         } else {
-            cout << "insert" << "\n";
 
             // Insert
 
@@ -536,14 +539,34 @@ int main(){
         }
 
         
+        //terminationCriterion = terminationCriterion +1;
 
-        terminationCriterion = terminationCriterion +1;
+        auto end = high_resolution_clock::now();
+        cout << duration_cast<seconds>(end -start).count() << "\n";
+        if(duration_cast<seconds>(end -start).count() >= timeStop) break;
+        // cout << duration_cast<seconds>(end -start).count() << "\n";
+        
 
-        // for (int i = 0; i < solTemporal.size(); i++){
-        //     cout << solTemporal[i]<< "\n";
-        //}
+        // if ((float)time_req/CLOCKS_PER_SEC >= timeStop){
+        //     cout << (float)time_req/CLOCKS_PER_SEC << "\n";
+        //     break;
+        // }
+
+        
+
+        
     }
-    
+
+    // auto end = high_resolution_clock::now();
+    // cout << duration_cast<seconds>(end -start).count() << "\n";
+
+    // cout << solFinal<< "\n";
+    // for (int i = 0; i < solBest.size(); i++){
+    //     cout << solBest[i]<< "\n";
+    // }
+
+
+    // Exportar resultados
 
     
  
