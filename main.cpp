@@ -313,7 +313,12 @@ int main(){
          
     }
 
+    calidadSol = travelDistance -  disExce - tiemExce*speed;
+
+    cout << calidadSol << "\n";
     cout << travelDistance << "\n";
+    cout << disExce << "\n";
+    cout << tiemExce << "\n";
 
  
 
