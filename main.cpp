@@ -80,6 +80,7 @@ int main(){
     vector<int> vEstaciones;
     vector<int> vecTemp;
     vector<int> solIncial;
+    vector<int> solActual;
     vector<int> solTemporal;
     vector<int> solBest;
     int flag = 0;
@@ -105,6 +106,9 @@ int main(){
     int indiceHelp3;
     int indiceHelp4;
     int contadorIter = 0;
+    double prob;
+    float delta;
+    float solFinal;
 
     int terminationCriterion = 0;
     //////////////////////////////////////////////////////////////////////////////////////////////
@@ -330,7 +334,7 @@ int main(){
 
     calidadSol = travelDistance +  disExce + tiemExce*speed;
 
-    cout << calidadSol << "\n";
+    //cout << calidadSol << "\n";
     // cout << travelDistance << "\n";
     // cout << disExce << "\n";
     // cout << tiemExce << "\n";
@@ -338,22 +342,24 @@ int main(){
  
     // Simulated Anneling
 
+    solFinal = travelDistance;
     solBest = solIncial;
     calidadBest = calidadSol;
 
-    // Vecindario solo swap y AFV
-
+    // Vecindario
+    solActual = solIncial;
+    
     while (terminationCriterion < 5){
         dado = static_cast<float>( rand())/ static_cast <float> (RAND_MAX);
         
-
+        solTemporal = solActual;
 
         if (dado <= 0.5){
             cout << "swap" << "\n";
 
             //Swap
 
-            solTemporal = solIncial;
+            
 
             flag = 1;
             while (flag != 0){
@@ -388,7 +394,7 @@ int main(){
 
             // Insert
 
-            solTemporal = solIncial;
+
 
             randomIndice = (rand() % stations) + 1;
 
@@ -494,8 +500,42 @@ int main(){
 
         calidadVecino = travelDistance +  disExce + tiemExce*speed;
 
-        cout << calidadVecino << "\n";
+        delta = calidadSol - calidadVecino;
 
+        if (delta >= 0.0){
+
+            solActual = solTemporal;
+            calidadSol = calidadVecino;
+
+            if (calidadBest >= calidadVecino){
+                calidadBest = calidadVecino;
+                solBest = solActual;
+                solFinal = travelDistance;
+            }
+            
+        } else {
+            dado = static_cast<float>( rand())/ static_cast <float> (RAND_MAX);
+
+            prob = exp(delta/temperatura);
+
+            if ( dado < prob){
+                
+                solActual = solTemporal;
+                calidadSol = calidadVecino;
+
+            }
+
+            
+        }
+
+        if(iteraciones == contadorIter){
+
+            temperatura = alfa*temperatura;
+            contadorIter = 0;
+
+        }
+
+        
 
         terminationCriterion = terminationCriterion +1;
 
