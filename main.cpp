@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstdlib>
 #include <fstream>
 #include <string>
 #include <sstream>
@@ -42,11 +43,6 @@ double lat2, double lon2)
         return rad * c; 
     }
 
-static double funcionEvaluacion(float maxDistance, float maxTime, vector<int> solucion, struct nodo *array){
-
-    //code
-
-}
 
 int main(){
 
@@ -88,6 +84,11 @@ int main(){
     float distanceLeft;
     float timeLeft;
     float travelDistance;
+    float disExce;
+    float tiemExce;
+    float calculoAux;
+    float calculoAux2;
+    float calidadSol;
    
     fstream newfile;
 
@@ -222,9 +223,97 @@ int main(){
     solIncial.push_back(0);
     solIncial.push_back(0);
     //sort(solIncial.begin(),solIncial.end());
-    for (int i = 0; i < solIncial.size(); i++){
-         cout << solIncial[i] - 22<< "\n";
+    // for (int i = 0; i < solIncial.size(); i++){
+    //      cout << solIncial[i] - 22<< "\n";
+    // }
+
+    // Evaluar calidad
+
+    distanceLeft = maxDistance;
+    timeLeft = maxTime;
+    travelDistance = 0.0;
+    disExce = 0.0;
+    tiemExce = 0.0;
+
+    for (int i = 0; i < solIncial.size() -1; i++){
+        
+        if (solIncial[i] == 0 && solIncial[i+1] == 0){
+            i = i +1;
+        }
+        if (i == solIncial.size()){
+            break;
+        }
+        
+        
+        if (solIncial[i] != 0 && solIncial[i+1] == 0 ){
+            
+            calculoAux = distanceLeft - matrizDistancias[solIncial[i]][solIncial[i+1]];
+            calculoAux2 = timeLeft - (matrizDistancias[solIncial[i]][solIncial[i+1]])/speed;
+            travelDistance = travelDistance + matrizDistancias[solIncial[i]][solIncial[i+1]];
+
+            if (calculoAux < 0){
+                disExce = disExce + abs(calculoAux);
+            }
+
+            if (calculoAux2 < 0){
+                tiemExce = tiemExce + abs(calculoAux2);
+            }
+
+            distanceLeft = maxDistance;
+            timeLeft = maxTime;
+            i = i +1;
+
+        } else{
+            if (solIncial[i] <= stations){
+
+                calculoAux = distanceLeft - matrizDistancias[solIncial[i]][solIncial[i+1]];
+                calculoAux2 = timeLeft - refuelTime;
+                travelDistance = travelDistance + matrizDistancias[solIncial[i]][solIncial[i+1]];
+
+                if (calculoAux < 0){
+                    disExce = disExce + abs(calculoAux);
+                }
+
+                if (calculoAux2 < 0){
+                    tiemExce = tiemExce + abs(calculoAux2);
+                }                
+
+                distanceLeft = maxDistance;
+
+            } else{
+
+                calculoAux = distanceLeft - matrizDistancias[solIncial[i]][solIncial[i+1]];
+                calculoAux2 = timeLeft - serviceTime;
+                travelDistance = travelDistance + matrizDistancias[solIncial[i]][solIncial[i+1]];
+
+                if (calculoAux < 0){
+                    disExce = disExce + abs(calculoAux);
+                    distanceLeft = 0.0;
+                } else{
+                    distanceLeft = distanceLeft - calculoAux; 
+                }
+                
+
+                if (calculoAux2 < 0){
+                    tiemExce = tiemExce + abs(calculoAux2);
+                    timeLeft = 0.0;
+                } else{
+                    timeLeft = timeLeft - calculoAux2;
+                }
+                
+                
+
+            }
+            
+            
+        }
+        
+        
+         
+         
     }
+
+    cout << travelDistance << "\n";
 
  
 
