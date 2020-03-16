@@ -64,12 +64,12 @@ int main(){
     double latitude;
 
     //Parametros SA
-    float temperatura = 900;
+    float temperatura = 250;
     float alfa= 0.92;
     int iteraciones = 70000;
 
     // Variables del main
-    int timeStop= 10;
+    int timeStop= 3*60;
     int loop;
     int contador = 0;
     char strTemp;
@@ -359,7 +359,8 @@ int main(){
         
         solTemporal = solActual;
 
-        if (dado <= 0.5){
+        dado = 0.1;// forzar swap
+        if (dado <= 0.9999){
 
             //Swap
 
@@ -398,7 +399,7 @@ int main(){
             // Insert
 
 
-
+            terminationCriterion =  terminationCriterion +1;
             randomIndice = (rand() % stations) + 1;
 
             indiceHelp1 = randomIndice;
@@ -415,6 +416,7 @@ int main(){
             indiceHelp2 = randomIndice;
 
             solTemporal.insert(solTemporal.begin() + indiceHelp2, indiceHelp1);
+            
         }
 
         contadorIter = contadorIter +1 ;
@@ -505,6 +507,8 @@ int main(){
 
         delta = calidadSol - calidadVecino;
 
+        
+
         if (delta >= 0.0){
 
             solActual = solTemporal;
@@ -539,34 +543,33 @@ int main(){
         }
 
         
-        //terminationCriterion = terminationCriterion +1;
+
 
         auto end = high_resolution_clock::now();
         cout << duration_cast<seconds>(end -start).count() << "\n";
         if(duration_cast<seconds>(end -start).count() >= timeStop) break;
-        // cout << duration_cast<seconds>(end -start).count() << "\n";
-        
-
-        // if ((float)time_req/CLOCKS_PER_SEC >= timeStop){
-        //     cout << (float)time_req/CLOCKS_PER_SEC << "\n";
-        //     break;
-        // }
-
         
 
         
     }
 
-    // auto end = high_resolution_clock::now();
-    // cout << duration_cast<seconds>(end -start).count() << "\n";
 
-    // cout << solFinal<< "\n";
-    // for (int i = 0; i < solBest.size(); i++){
-    //     cout << solBest[i]<< "\n";
-    // }
+    cout << solFinal<< "\n";
+    cout << temperatura<< "\n";
+    //cout << terminationCriterion<< "\n";
+    for (int i = 0; i < solBest.size(); i++){
+        cout << solBest[i]<< " ";
+    }
 
+    cout << "\n";
+    
+    cout << calidadVecino<< "\n";
+    for (int i = 0; i < solTemporal.size(); i++){
+        cout << solTemporal[i]<< " ";
+    }
 
-    // Exportar resultados
+    cout << "\n";
+    //Exportar resultados
 
     
  
