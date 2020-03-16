@@ -22,7 +22,7 @@ struct nodo
 
 static double haversine(double lat1, double lon1, 
 double lat2, double lon2) 
-    { 
+    {  
         // distance between latitudes 
         // and longitudes 
         double dLat = (lat2 - lat1) * 
@@ -62,6 +62,10 @@ int main(){
     double longitude;
     double latitude;
 
+    //Parametros SA
+    float temperatura = 900;
+    float alfa= 0.92;
+    int iteraciones = 70000;
 
     // Variables del main
     int loop;
@@ -76,6 +80,7 @@ int main(){
     vector<int> vEstaciones;
     vector<int> vecTemp;
     vector<int> solIncial;
+    vector<int> solTemporal;
     int flag = 0;
     int intBuffer;
     double dummyResult;
@@ -89,6 +94,19 @@ int main(){
     float calculoAux;
     float calculoAux2;
     float calidadSol;
+    float calidadVecino;
+    int seed= 123;
+    float dado;
+    int randomIndice;
+    int indiceHelp1;
+    int indiceHelp2;
+    int indiceHelp3;
+    int indiceHelp4;
+    int contadorIter;
+
+    int terminationCriterion = 0;
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    srand(seed);
    
     fstream newfile;
 
@@ -308,7 +326,7 @@ int main(){
          
     }
 
-    calidadSol = travelDistance -  disExce - tiemExce*speed;
+    calidadSol = travelDistance +  disExce + tiemExce*speed;
 
     cout << calidadSol << "\n";
     cout << travelDistance << "\n";
@@ -320,7 +338,58 @@ int main(){
 
     // Vecindario solo swap y AFV
 
-         
-        
+    while (terminationCriterion < 5){
+        dado = static_cast<float>( rand())/ static_cast <float> (RAND_MAX);
+
+
+        if (dado <= 0.5){
+            cout << "swap" << "\n";
+
+            solTemporal = solIncial;
+
+            flag = 1;
+            while (flag != 0){
+                randomIndice = rand() % solTemporal.size();
+
+                if( solTemporal[randomIndice] != 0){
+                    flag = 0;
+                }
+            }
+
+            indiceHelp1 = randomIndice;
+
+            flag = 1;
+            while (flag != 0){
+                randomIndice = rand() % solTemporal.size();
+
+                if( randomIndice != indiceHelp1 && solTemporal[randomIndice] != 0){
+                    flag = 0;
+                }
+            }
+
+            indiceHelp2 = randomIndice;
+
+            indiceHelp3 = solTemporal[indiceHelp1];
+            indiceHelp4 = solTemporal[indiceHelp2];
+
+            solTemporal[indiceHelp1] = indiceHelp4;
+            solTemporal[indiceHelp2] = indiceHelp3;
+
+        } else {
+            cout << "insert" << "\n";
+        }
+
+        terminationCriterion = terminationCriterion +1;
+
+        // for (int i = 0; i < solTemporal.size(); i++){
+        //     cout << solTemporal[i]<< "\n";
+        }
+    }
+    
+
+    
+ 
+
+
     
 }
