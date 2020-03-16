@@ -20,7 +20,7 @@ struct nodo
 
 
 static double haversine(double lat1, double lon1, 
-                        double lat2, double lon2) 
+double lat2, double lon2) 
     { 
         // distance between latitudes 
         // and longitudes 
@@ -41,14 +41,21 @@ static double haversine(double lat1, double lon1,
         double c = 2 * asin(sqrt(a)); 
         return rad * c; 
     }
+
+static double funcionEvaluacion(float maxDistance, float maxTime, vector<int> solucion, struct nodo *array){
+
+    //code
+
+}
+
 int main(){
 
     //Variables del archivo
     string name;
     int costumers;
     int stations;
-    int maxTime;
-    int maxDistance;
+    float  maxTime;
+    float maxDistance;
     float speed;
     int serviceTime;
     int refuelTime;
@@ -78,6 +85,9 @@ int main(){
     double dummyResult;
     int indexSave;
     int saveLast;
+    float distanceLeft;
+    float timeLeft;
+    float travelDistance;
    
     fstream newfile;
 
@@ -90,7 +100,7 @@ int main(){
     struct nodo nodArray[loop];
     double matrizDistancias[loop][loop];
 
-    // Punto de partida
+    // Punto de partida f0
 
     newfile >> nodId >> type >> longitude >> latitude;
 
@@ -146,56 +156,72 @@ int main(){
     // Creacion de sol inicial
 
     solIncial.push_back(0);
+    distanceLeft = maxDistance;
+    timeLeft = maxTime;
     
     vector<int>::iterator buscador;
     while (vecTemp.size() != costumers){
+        
+        result = std::numeric_limits<double>::max();
+        intBuffer = solIncial.back();
+        for (int i =   stations; i < loop; i++){
+            
+            dummyResult = matrizDistancias[intBuffer][i];
 
-        if (flag == 0){
+            buscador = find(solIncial.begin(),solIncial.end(), i);
 
-            result = std::numeric_limits<double>::max();
-            intBuffer = solIncial.back();
-            for (int i =   stations; i < loop; i++){
-
-
-
-                dummyResult = matrizDistancias[intBuffer][i];
-
-                buscador = find(solIncial.begin(),solIncial.end(), i);
-
-                if (buscador == solIncial.end()){
+            if (buscador == solIncial.end()){
                     
                     saveLast = i;
 
-                    if (dummyResult <= result){
+                if (dummyResult <= result){
 
-                        result = dummyResult;
-                        indexSave = i;
+                    result = dummyResult;
+                    indexSave = i;
 
-                    }
-                    
                 }
+                    
+            }
                 
 
-            }
+        }
+
+        if( distanceLeft - matrizDistancias[intBuffer][indexSave] < 0 || timeLeft - serviceTime < 0){
+            flag = 1;
+
+        }
+              
+        if (flag == 0){
+
+            distanceLeft = distanceLeft - matrizDistancias[intBuffer][indexSave];
+            timeLeft = timeLeft - serviceTime;
 
             if (vecTemp.size() == costumers -1){
 
                 solIncial.push_back(saveLast);
                 vecTemp.push_back(saveLast);
+
             } else {
                 solIncial.push_back(indexSave);
                 vecTemp.push_back(indexSave);
-            }
-            
-            
-            
-            
+            }  
+        } else{
+            flag = 0;
+            solIncial.push_back(0);
+            solIncial.push_back(0);
+
+            distanceLeft = maxDistance;
+            timeLeft = maxTime;
+
         }
+        
         
         
     }
     
-    // sort(solIncial.begin(),solIncial.end());
+    solIncial.push_back(0);
+    solIncial.push_back(0);
+    //sort(solIncial.begin(),solIncial.end());
     for (int i = 0; i < solIncial.size(); i++){
          cout << solIncial[i] - 22<< "\n";
     }
