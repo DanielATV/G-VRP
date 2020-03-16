@@ -301,15 +301,10 @@ int main(){
                     timeLeft = timeLeft - calculoAux2;
                 }
                 
-                
-
             }
-            
             
         }
         
-        
-         
          
     }
 
@@ -321,7 +316,9 @@ int main(){
     cout << tiemExce << "\n";
 
  
+    // Simulated Anneling
 
+    // Vecindario solo swap y AFV
 
          
         
