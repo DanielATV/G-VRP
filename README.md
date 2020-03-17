@@ -18,6 +18,9 @@ Dirigirse a la linea 363 y especificar en decimal la probabilidad de elegir swap
 Cambiar parametros de SA:
 Dirigirse a la linea 66 y a continuacion se encuentran todos los parametros del SA, los cuales pueden ser cambiados libremente.
 
+Cambiar tiempo de ejecución:
+Dirigirse a la linea 72 y especificar el tiempo de ejecución en segundos. 
+
 Consideraciones:
 
 La instancia que se desee ejecutar debe estar en el mismo directorio que archivo main.cpp y el resultado final se entrega por consola.
