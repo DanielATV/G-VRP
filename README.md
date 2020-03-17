@@ -23,4 +23,9 @@ Dirigirse a la linea 72 y especificar el tiempo de ejecución en segundos.
 
 Consideraciones:
 
-La instancia que se desee ejecutar debe estar en el mismo directorio que archivo main.cpp y el resultado final se entrega por consola.
+La instancia que se desee ejecutar debe estar en el mismo directorio que archivo main.cpp y el resultado final se entrega por consola con el siguente formato: 
+
+calidad de la solucion final
+temperatura final
+ruta final
+ultima ruta revisada por el algoritmo
